@@ -1,11 +1,29 @@
+#### Order of Operations ----
+
+# Step 1: Determine how many stimuli from each category is going to be used.
+#   default = trial_quantity/(length(unique(categories)))
+#   [weighting]
+# Step 2: Determine the level of randomization
+#   bin_repeat = 1 by default
+#   bin_size = bin_repeat * (length(unique(categories)))
+#   [bin_randomize & bin_size]
+# Step 3: Determine stimuli assignment to each trial
+#   default dist = "Uniform" (binomial for 1 is also possible)
+#   [distributions]
+# Step 4: Clean & Ready data for export
+
+
 ####  Uniform Dist, 1 Category, Equal Weights Trial ----
 library(tidyverse)
+library(microbenchmark)
 
 set.seed(112211)
 
 information <- data.frame(
-  images = c(1:40),
-  category = rep(c("a","b","c", "d"), each = 10))
+  images   = c(1:100),
+  category = rep(c("a","b"), each = 50),
+  wayyyy   = c(rep(1/200, 50), rep(1/50, 50))
+  )
 
 trial_quantity <- 24
 category_levels <- 1
@@ -16,16 +34,14 @@ bin_quantity <- trial_quantity/bin_size
 
 sampled_list <- list()
 
-q <- category_levels
-
 for(i in categories){
   n <- grep(i, categories)
-  filtered <- information[information[1+q] == i, 1 ]
+  filtered <- information[information[1+category_levels] == i, 1 ]
   sampled <- sample(filtered, bin_quantity, replace = FALSE)
   sampled_list[[n[1]]] <- sampled
 }
 
-filtered <- sapply(sampled_list, function(x) x[1:6])
+filtered <- sapply(sampled_list, function(x) x[1:bin_quantity])
 final_list <- list()
 for(j in seq(bin_quantity)){
   final_list[[j]] <- sample(filtered[j,])
@@ -53,7 +69,33 @@ trials <- do.call(rbind, final_list)
 
 #### Function ----
 #' Generates trial order for
-pigeon_trialgenerate <- function(stimuli, trial_quantity,
-                                 distribution = "Uniform", weights = FALSE){
+pigeon_trialgenerate <- function(x, trial_quantity = length(x[,1]), category_levels = 1,
+                                 distribution = "Uniform", weights = FALSE,
+                                 seed = 112211){
+  sset.seed(seed)
+
+  categories <- unique(x[,2])
+  bin_size <- length(categories)
+  bin_quantity <- trial_quantity/bin_size
+
+  sampled_list <- list()
+
+  for(i in categories){
+    n <- grep(i, categories)
+    filtered <- x[information[1+category_levels] == i, 1 ]
+    sampled <- sample(filtered, bin_quantity, replace = FALSE)
+    sampled_list[[n[1]]] <- sampled
+  }
+
+  filtered <- sapply(sampled_list, function(x) x[1:bin_quantity])
+  final_list <- list()
+  for(j in seq(bin_quantity)){
+    final_list[[j]] <- sample(filtered[j,])
+  }
+  trials <- do.call(rbind, final_list)
+
+  invisible(return(
+    as.data.frame(trials)
+    ))
 
 }

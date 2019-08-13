@@ -3,6 +3,7 @@ pigeon_dotplot <- function(Quantity, Radius, Density, DotNames = NA_character_,
                            save = "jpg", csv = FALSE,
                            seed = 112211, output = "list"){
 
+  set.seed(seed)
 
 }
 

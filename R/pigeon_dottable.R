@@ -1,9 +1,19 @@
-pigeon_dottable <- function(Ratios){
+pigeon_dottable <- function(minRatio = .5, maxRatio = .99, steps = .01,
+                            minDots = 12){
 
   # TODO: Choice to supply own set of ratios or quantities
-  ANSRatio <- seq(.5,.99, by = Ratios)
+  ANSRatio <- seq(minRatio, maxRatio, by = steps)
   fractions <- MASS::as.fractions(ANSRatio)
-  fractions <- stringr::str_split(fractions, "/", simplify = TRUE)
+  fractions <- as.data.frame(stringr::str_split(fractions, "/", simplify = TRUE))
+  colnames(fractions) <- c("QuantA", "QuantB")
+  fractions$QuantA <- type.convert(fractions$QuantA)
+  fractions$QuantB <- type.convert(fractions$QuantB)
+  #TODO: Fix below.
+  fractions <- dplyr::mutate(
+    Multiplier = ceiling(QuantA/minDots),
+    QuantA = QuantA * Multiplier,
+    QuantB = QuantB * Multiplier
+  )
   dottable <- data.frame(
     Ratio = ANSRatio,
     QuantA = fractions[,1],

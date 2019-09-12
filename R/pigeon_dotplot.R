@@ -1,11 +1,59 @@
-pigeon_dotplot <- function(Quantity, Radius, Density, DotNames = NA_character_,
-                           length = 20, width = 20, units = "cm",
-                           save = "jpg", csv = FALSE,
-                           seed = 112211, output = "list"){
+pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 112211){
 
   set.seed(seed)
 
+  DotGrid <- data.frame(NULL)
+
+  for(i in seq(length(Radius))){
+    DotGridA <- tibble(
+        XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
+        YCords = XCords) %>%
+      expand(XCords, YCords)
+    DotGridA <- DotGridTemp[sample(seq(length(DotGridTemp$XCords)), QuantA[i]),] %>%
+      mutate(
+        Ratio = QuantA[i]/QuantB[i],
+        Type = "A",
+        QuantA = QuantA[i],
+        QuantB = QuantB[i],
+        Radius = Radius[i],
+        LocationSize = LocationSize[i],
+        stimID = paste0("IR",Ratio*100,"A")
+      )
+    ggplot(DotGridA, aes(x = XCords, y = YCords)) +
+      geom_jitter(size = DotGridA$Radius) +
+      theme_void() +
+      coord_cartesian(xlim = c(-10, 10), ylim = c(-10,10))
+    ggsave(paste0(PlotID[i],"A.jpg"), device = "jpeg", height = 20, width = 20, units = "cm")
+
+
+    DotGridB <- tibble(
+      XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
+      YCords = XCords) %>%
+      expand(XCords, YCords)
+    DotGridB <- DotGridTemp[sample(seq(length(DotGridTemp$XCords)), QuantB[i]),] %>%
+      mutate(
+        stimID = i,
+        Ratio = QuantA[i]/QuantB[i],
+        Type = "B",
+        QuantA = QuantA[i],
+        QuantB = QuantB[i],
+        Radius = Radius[i],
+        LocationSize = LocationSize[i]
+      )
+
+    ggplot(DotGridB, aes(x = XCords, y = YCords)) +
+      geom_jitter(size = DotGridB$Radius) +
+      theme_void() +
+      coord_cartesian(xlim = c(-10, 10), ylim = c(-10,10))
+    ggsave(paste0(PlotID[i],"B.jpg"), device = "jpeg", height = 20, width = 20, units = "cm")
+
+    print(i)
+  }
+
 }
+
+
+
 
 #### What do I want from this script ----
 # Creating randomized dot arrays in ggplot'

@@ -1,7 +1,8 @@
-pigeon_dottable <- function(minRatio = .5, maxRatio = .99, steps = .01,
+pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
                             minDots = 12){
 
   # TODO: Replace magrittr
+  require(magrittr)
   # TODO: Choice to supply own set of ratios or quantities
   # TODO: Choose Controls, currecntly only IR, +Density/CArea/CPeri
   ANSRatio <- seq(minRatio, maxRatio, by = steps)
@@ -10,7 +11,7 @@ pigeon_dottable <- function(minRatio = .5, maxRatio = .99, steps = .01,
   colnames(fractions) <- c("QuantA", "QuantB")
   fractions$QuantA <- type.convert(fractions$QuantA)
   fractions$QuantB <- type.convert(fractions$QuantB)
-  fractions$Multiplier <- ceiling(minDots/fractions$QuantA)
+  fractions$Multiplier <- ceiling(minDots/fractions$QuantB)
   fractions$QuantA <- fractions$Multiplier * fractions$QuantA
   fractions$QuantB <- fractions$Multiplier * fractions$QuantB
   dottable <- data.frame(
@@ -19,12 +20,15 @@ pigeon_dottable <- function(minRatio = .5, maxRatio = .99, steps = .01,
     QuantB = fractions$QuantB
   ) %>% dplyr::mutate(
     LocationSize = 20,
-    IRadius = runif(length(ANSRatio), min = .01, max = LocationSize/(2*QuantB)),
+    IRadius = runif(length(ANSRatio), min = .5, max = LocationSize/sqrt(QuantB)),
     CAreaA = QuantA * IRadius^2 * pi,
     CAreaB = QuantB * IRadius^2 * pi,
     CPeriA = QuantA * 2 * pi * IRadius,
     CPeriB = QuantB * 2 * pi * IRadius,
-    Control = "IR"
+    Control = "IR",
+    Stimuli = trunc(ANSRatio*100),
+    ggsaveA = paste0(Control,Stimuli,"A.jpg"),
+    ggsaveB = paste0(Control,Stimuli,"B.jpg")
     #TODO: Add Density_px/Density_quant
     #TODO: Add stim ID
   )

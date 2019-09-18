@@ -9,7 +9,7 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
         XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
         YCords = XCords) %>%
       expand(XCords, YCords)
-    DotGridA <- DotGridTemp[sample(seq(length(DotGridTemp$XCords)), QuantA[i]),] %>%
+    DotGridA <- DotGridA[sample(seq(length(DotGridA$XCords)), QuantA[i]),] %>%
       mutate(
         Ratio = QuantA[i]/QuantB[i],
         Type = "A",
@@ -30,7 +30,7 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
       XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
       YCords = XCords) %>%
       expand(XCords, YCords)
-    DotGridB <- DotGridTemp[sample(seq(length(DotGridTemp$XCords)), QuantB[i]),] %>%
+    DotGridB <- DotGridB[sample(seq(length(DotGridB$XCords)), QuantB[i]),] %>%
       mutate(
         stimID = i,
         Ratio = QuantA[i]/QuantB[i],

@@ -19,6 +19,7 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
     QuantA = fractions$QuantA,
     QuantB = fractions$QuantB
   ) %>% dplyr::mutate(
+    #Assumes location size
     LocationSize = 20,
     IRadius = runif(length(ANSRatio), min = .5, max = LocationSize/sqrt(QuantB)),
     CAreaA = QuantA * IRadius^2 * pi,

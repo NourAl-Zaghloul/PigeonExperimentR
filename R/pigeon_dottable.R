@@ -27,7 +27,7 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
     CPeriA = QuantA * 2 * pi * IRadius,
     CPeriB = QuantB * 2 * pi * IRadius,
     Control = "IR",
-    Stimuli = trunc(ANSRatio*100),
+    Stimuli = ANSRatio*100,
     ggsaveA = paste0(Control,Stimuli,"A.jpg"),
     ggsaveB = paste0(Control,Stimuli,"B.jpg")
     #TODO: Add Density_px/Density_quant

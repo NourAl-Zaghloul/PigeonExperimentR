@@ -1,4 +1,5 @@
 pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 112211){
+  # TODO: Different Radii per Quant
 
   set.seed(seed)
 

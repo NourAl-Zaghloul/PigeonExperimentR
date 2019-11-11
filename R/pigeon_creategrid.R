@@ -1,9 +1,22 @@
+# Creates a wrapper around seqgrid for more complex grids
+# seqggrid works great for simple grids or more complex grids where you do the math beforehand
+# creategrid is to do the math for complex grids for you (since they're always the same)
 pigeon_creategrid <- function(stim_dim, grid_dim, buffer = 0, location_jitter = FALSE, clean = FALSE){
   # TODO: Currently only works with square dimensions, but can include 2-3 if iterative
-  # TODO: Steal from pigeon_dotplot & createGrid.R in maktaba
   # TODO: remove grid creation from pigeon_dotplot to simplify it
+  # TODO: Location Jitter
+  # TODO: what did I mean by clean again?
+  # TODO: Make it more than 2-dimensional
+  # TODO: Differing amounts of buffer per dimension
   # Generalize to two functions? pigeon_seqGrid for simple stuff & pigeon_createGrid for more options
   # make pipeable? purrr::map2-able?
+  seq_from = stim_dim/2 + buffer
+  seq_to = grid_dim - seq_from
+  seq_by = stim_dim + buffer
+
+  pigeon_seqgrid(rep(seq_from,2), rep(seq_to,2), rep(seq_by,2),
+                 names.col = c("x","y"))
+
 }
 
 #### createGrid.R ----

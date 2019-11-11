@@ -1,4 +1,4 @@
-pigeon_seqgrid <- function(from, to, by){
+pigeon_seqgrid <- function(from, to, by, names.col = NULL){
   # This is just a simple way to create a grid sequences using
   #   seq() and expand.grid() for all the combinations possible
   #   TODO: optional name parameter as well (must match length of from)
@@ -28,6 +28,12 @@ pigeon_seqgrid <- function(from, to, by){
 
   ##### expand.grid function----
   grid_expanded <- expand.grid(data_list)
+
+  #### variable naming ----
+  # TODO: Warning
+  if(exists("names.col") && length(names.col) == length(from)){
+    names(grid_expanded) <- names.col
+  }
 
   ##### returns the answer ----
   return(grid_expanded)

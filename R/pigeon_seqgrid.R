@@ -1,8 +1,6 @@
 pigeon_seqgrid <- function(from, to, by, names.col = NULL){
   # This is just a simple way to create a grid sequences using
   #   seq() and expand.grid() for all the combinations possible
-  #   TODO: optional name parameter as well (must match length of from)
-  #     otherwise: x,y,z if length(from) <= 3, or
 
   # TODO: error catching
   ##### error catching: ----
@@ -18,6 +16,7 @@ pigeon_seqgrid <- function(from, to, by, names.col = NULL){
   #   Doesn't have purr installed
 
   ##### Create the full vectors for our variables ----
+  # TODO: Really need a warning created here
   from2 = from
   to2 = rep(to, length.out = length(from))
   by2 = rep(by, length.out = length(from))
@@ -31,8 +30,10 @@ pigeon_seqgrid <- function(from, to, by, names.col = NULL){
 
   #### variable naming ----
   # TODO: Warning
-  if(exists("names.col") && length(names.col) == length(from)){
+  if(exists("names.col") && length(names.col) >= length(from2)){
     names(grid_expanded) <- names.col
+  } else if(length(from2) <= 3){
+    names(grid_expanded) <- c("x","y","z")[1:length(from2)]
   }
 
   ##### returns the answer ----

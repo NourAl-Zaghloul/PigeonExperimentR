@@ -1,5 +1,11 @@
 pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 112211){
   # TODO: Different Radii per Quant
+  # TODO: Colors/Shapes/OtherThemes
+  # TODO: Overlapping & Opacity
+  # TODO: Equal among different stim
+  # TODO: iterable, but not by Radius
+  # TODO: Set Density (grep(median$y, y)) & rbinom?, Not sure how to do with x?
+  # TODO: Replace grid creation with createGrid/seqGrid
 
   set.seed(seed)
 

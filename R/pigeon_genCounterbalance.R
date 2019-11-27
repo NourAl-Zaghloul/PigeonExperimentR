@@ -13,8 +13,20 @@ pigeon_genCounterbalance <- function(x, type = "latinsquare", seed = NA){
 
   # The actual processes
   if(type == "simple"){
-    # TODO: Actually make the every permutation version
-    OUT <- expand.grid(x)
+    # TODO: Translate this to the dataframe result
+    # TODO: warning or error if permutation is going to be too large... > 5
+    #       + Override if exists
+    OUTtemp <- seq(length(x))
+    for(i in seq(factorial(length(x)))){
+      for(j in seq(length(x) - 1)){
+        if(i%%factorial(j) == 0){
+          OUTtemp <- OUTtemp[c(0:(length(x) - 1 - j), (length(x)-j+1):length(x), (length(x)-j))]
+          print(OUTtemp)
+        }
+      }
+    }
+
+    OUT <- OUTtemp
 
   } else if(type == "latinsquare"){
 

@@ -21,12 +21,12 @@ pigeon_genCounterbalance <- function(x, type = "latinsquare", seed = NA){
       for(j in seq(length(x) - 1)){
         if(i%%factorial(j) == 0){
           OUTtemp <- OUTtemp[c(0:(length(x) - 1 - j), (length(x)-j+1):length(x), (length(x)-j))]
-          print(OUTtemp)
+          # print(OUTtemp)
         }
       }
+      OUT[, i] <- x[OUTtemp]
     }
 
-    OUT <- OUTtemp
 
   } else if(type == "latinsquare"){
 

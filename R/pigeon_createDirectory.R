@@ -19,7 +19,7 @@ pigeon_createDirectory <- function(path, name){
   setwd("../")
 
   # Experiment Directory
-  setwd(paste0("./1_Experiment/",name))
+  setwd(paste0("./1_Experiment_",name))
   dir.create("Stimuli")
   dir.create("Conditions")
   dir.create("Data")
@@ -28,12 +28,12 @@ pigeon_createDirectory <- function(path, name){
   setwd("../")
 
   # Analysis Directory
-  setwd(paste0("2_Analysis",name))
+  setwd(paste0("2_Analysis_",name))
 
   setwd("../")
 
   # Presentation Directory
-  setwd(paste0("3_Presentation",name))
+  setwd(paste0("3_Presentation_",name))
 
   setwd("../")
 

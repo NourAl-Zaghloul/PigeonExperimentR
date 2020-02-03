@@ -18,14 +18,7 @@ pigeon_createDirectory <- function(path, name){
   #### Documents Directory ----
   setwd(paste0("./0_Documents_", name))
   write("# History Log",  paste0("experimentLog_", name,".md"))
-  write("---
-          title: \"Pre-Registration Template\"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```", paste0("PreReg_", name,".Rmd"))
+  write(readRDS("../Data/PreRegistrationRmd.Rdata"), paste0("PreReg_", name,".Rmd"))
   write("# Annotated Bibliography",  paste0("annotatedBibliography_", name,".md"))
   setwd("../")
 

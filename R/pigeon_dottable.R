@@ -1,4 +1,4 @@
-pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
+pigeon_dottable <- function(minRatio = 1.01, maxRatio = 2, steps = .01,
                             minDots = 12){
 
   # TODO: Replace magrittr
@@ -11,7 +11,9 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
   colnames(fractions) <- c("QuantA", "QuantB")
   fractions$QuantA <- type.convert(fractions$QuantA)
   fractions$QuantB <- type.convert(fractions$QuantB)
-  fractions$Multiplier <- ceiling(minDots/fractions$QuantB)
+  # in case the ratio is a whole number (e.g. 2 instead of 2/1)
+  fractions <- fractions %>% dplyr::mutate(QuantB = ifelse(is.na(QuantB),1,QuantB))
+  fractions$Multiplier <- ceiling((minDots+runif(1,min=0,max=2*minDots))/fractions$QuantB)
   fractions$QuantA <- fractions$Multiplier * fractions$QuantA
   fractions$QuantB <- fractions$Multiplier * fractions$QuantB
   dottable <- data.frame(
@@ -21,11 +23,12 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
   ) %>% dplyr::mutate(
     #Assumes location size
     LocationSize = 20,
-    IRadius = runif(length(ANSRatio), min = .5, max = LocationSize/sqrt(QuantB)),
-    CAreaA = QuantA * IRadius^2 * pi,
-    CAreaB = QuantB * IRadius^2 * pi,
-    CPeriA = QuantA * 2 * pi * IRadius,
-    CPeriB = QuantB * 2 * pi * IRadius,
+    IRadiusA = runif(length(ANSRatio), min = .5, max = LocationSize/sqrt(QuantB)),
+    IRadiusB = IRadiusA,
+    CAreaA = QuantA * IRadiusA^2 * pi,
+    CAreaB = QuantB * IRadiusB^2 * pi,
+    CPeriA = QuantA * 2 * pi * IRadiusA,
+    CPeriB = QuantB * 2 * pi * IRadiusB,
     Control = "IR",
     Stimuli = ANSRatio*100,
     ggsaveA = paste0(Control,Stimuli,"A.jpg"),
@@ -33,6 +36,7 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
     #TODO: Add Density_px/Density_quant
     #TODO: Add stim ID
   )
+  return(dottable)
 
   # dottable <- data.frame(
   #   Ratio = ANSRatio,
@@ -49,7 +53,6 @@ pigeon_dottable <- function(minRatio = 1.01, maxRatio = 1.99, steps = .01,
   # #   Serial = seq(length(ANSRatio))
   # )
   # dottable$StimID <- paste0(dottable$Serial, dottable$Control)
-  dottable
 }
 
 #### Goals ----

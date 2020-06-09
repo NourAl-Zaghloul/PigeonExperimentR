@@ -57,6 +57,8 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
     print(i)
   }
 
+  #write.csv(DotGrid, "ANSdotgrid.csv", append = FALSE)
+
 }
 
 

@@ -1,4 +1,4 @@
-pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 112211){
+pigeon_dotplot <- function(QuantA, QuantB, RadiusA, RadiusB, LocationSize, PlotID_A, PlotID_B, seed = 112211){
   # TODO: Different Radii per Quant
   # TODO: Colors/Shapes/OtherThemes
   # TODO: Overlapping & Opacity
@@ -11,9 +11,9 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
 
   DotGrid <- data.frame(NULL)
 
-  for(i in seq(length(Radius))){
+  for(i in seq(length(RadiusA))){
     DotGridA <- tibble(
-        XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
+        XCords = seq((RadiusA[i]-LocationSize[i])/2, (LocationSize[i]-RadiusA[i])/2, by = RadiusA[i]/2),
         YCords = XCords) %>%
       expand(XCords, YCords)
     DotGridA <- DotGridA[sample(seq(length(DotGridA$XCords)), QuantA[i]),] %>%
@@ -22,19 +22,19 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
         Type = "A",
         QuantA = QuantA[i],
         QuantB = QuantB[i],
-        Radius = Radius[i],
+        RadiusA = RadiusA[i],
         LocationSize = LocationSize[i],
         stimID = paste0("IR",Ratio*100,"A")
       )
     ggplot(DotGridA, aes(x = XCords, y = YCords)) +
-      geom_jitter(size = DotGridA$Radius) +
+      geom_jitter(size = DotGridA$RadiusA) +
       theme_void() +
       coord_cartesian(xlim = c(-10, 10), ylim = c(-10,10))
-    ggsave(paste0(PlotID[i],"A.jpg"), device = "jpeg", height = 20, width = 20, units = "cm")
+    ggsave(paste0(PlotID_A[i],'.jpg'), device = "jpeg", height = 20, width = 20, units = "cm")
 
 
     DotGridB <- tibble(
-      XCords = seq((Radius[i]-LocationSize[i])/2, (LocationSize[i]-Radius[i])/2, by = Radius[i]/2),
+      XCords = seq((RadiusB[i]-LocationSize[i])/2, (LocationSize[i]-RadiusB[i])/2, by = RadiusB[i]/2),
       YCords = XCords) %>%
       expand(XCords, YCords)
     DotGridB <- DotGridB[sample(seq(length(DotGridB$XCords)), QuantB[i]),] %>%
@@ -44,15 +44,15 @@ pigeon_dotplot <- function(QuantA, QuantB, Radius, LocationSize, PlotID, seed = 
         Type = "B",
         QuantA = QuantA[i],
         QuantB = QuantB[i],
-        Radius = Radius[i],
+        RadiusB = RadiusB[i],
         LocationSize = LocationSize[i]
       )
 
     ggplot(DotGridB, aes(x = XCords, y = YCords)) +
-      geom_jitter(size = DotGridB$Radius) +
+      geom_jitter(size = DotGridB$RadiusB) +
       theme_void() +
       coord_cartesian(xlim = c(-10, 10), ylim = c(-10,10))
-    ggsave(paste0(PlotID[i],"B.jpg"), device = "jpeg", height = 20, width = 20, units = "cm")
+    ggsave(paste0(PlotID_B[i], '.jpg'), device = "jpeg", height = 20, width = 20, units = "cm")
 
     print(i)
   }
